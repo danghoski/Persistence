@@ -5,15 +5,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aghogho.persistence.databinding.ShoppingItemBinding
 
-class ShoppingAdapter(val shoppingItems: List<ShoppingModel>)
-    : RecyclerView.Adapter<ShoppingAdapter.ViewHolder>() {
+class ShoppingAdapter(
+    val shoppingItems: List<ShoppingModel>,
+    val clickFnx: (ShoppingModel) -> Unit
+) : RecyclerView.Adapter<ShoppingAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: ShoppingItemBinding)
-        :RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(val binding: ShoppingItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(shoppingItem :ShoppingModel){
+        fun bind(shoppingItem: ShoppingModel) {
             binding.category.text = shoppingItem.category
             binding.description.text = shoppingItem.description
+            binding.root.setOnClickListener {
+                clickFnx(shoppingItem)
+            }
         }
     }
 
@@ -27,5 +32,6 @@ class ShoppingAdapter(val shoppingItems: List<ShoppingModel>)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(shoppingItems.get(position))
     }
+
     override fun getItemCount() = shoppingItems.size
 }

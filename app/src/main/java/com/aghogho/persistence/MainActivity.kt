@@ -1,5 +1,6 @@
 package com.aghogho.persistence
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.room.Room
@@ -17,7 +18,10 @@ class MainActivity : AppCompatActivity() {
 
         myShoppingList = mutableListOf()
 
-        myShoppingAdapter = ShoppingAdapter(listOf())
+        myShoppingAdapter = ShoppingAdapter(myShoppingList){
+            val intent = Intent(this, MainActivity::class.java)
+
+        }
         binding.recyclerView.adapter = myShoppingAdapter
 
         binding.button.setOnClickListener {
@@ -27,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             val db = Room.databaseBuilder(
                 applicationContext,
                 ShoppingDatabase::class.java,"shopping-database"
-            ).build()
+            ).allowMainThreadQueries().build()
 
             val shoppingDAO = db.ShoppingDAO()
 
